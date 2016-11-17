@@ -12,7 +12,6 @@
     <modules>
         <module>../mybatis-3-mybatis-3.2.8</module>
         <module>../mbs-test</module>
-        <module>../mbs-haha</module>
     </modules>
 
 </project>
