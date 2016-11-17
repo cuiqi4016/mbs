@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cuiqi.dao.ArticleDao">
+    <resultMap id="baseResultMap" type="com.cuiqi.domain.Article">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="views" column="views"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <association property="author" javaType="User">
+            <id property="id" column="author_id"/>
+            <result property="name" column="author_name"/>
+            <result property="sex" column="author_sex"/>
+            <result property="email" column="author_email"/>
+            <result property="phone" column="author_phone"/>
+        </association>
+        <collection property="commentList" ofType="ArticleComment">
+            <id property="id" column="ac_id"/>
+            <result property="commentId" column="ac_comment_id"/>
+            <result property="articleId" column="ac_article_id"/>
+            <result property="content" column="ac_content"/>
+            <result property="content" column="ac_content"/>
+            <result property="createTime" column="ac_create_time"/>
+            <result property="createBy" column="ac_create_by"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectList" resultMap="baseResultMap">
+        SELECT
+            a.id,
+            a.author,
+            a.content,
+            a.create_by,
+            a.create_time,
+            a.title,
+            a.views,
+            a.update_by,
+            a.update_time,
+            u.id author_id,
+            u.`name` author_name,
+            u.email author_email,
+            u.phone author_phone,
+            ac.id ac_id,
+            ac.article_id ac_article_id,
+            ac.comment_id ac_comment_id,
+            ac.content ac_content,
+            ac.create_by ac_create_by,
+            ac.create_time ac_create_time
+        FROM
+            t_article a
+        LEFT JOIN t_user u ON a.author = u.id
+        LEFT JOIN t_article_comment ac on a.id = ac.article_id
+        <where>
+            <if test="id != null">
+                and a.id = #{id}
+            </if>
+        </where>
+    </select>
+</mapper>
